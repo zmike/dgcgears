@@ -224,7 +224,7 @@ init_vk(const char *extension)
 
    VkPhysicalDeviceVulkan13Features feats13 = {
       VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES,
-      &shobj,
+      use_shader_object ? &shobj : NULL,
       .dynamicRendering = VK_TRUE
    };
 
