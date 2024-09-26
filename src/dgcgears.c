@@ -1691,6 +1691,7 @@ usage(void)
    printf("  -samples N              run in multisample mode with N samples\n");
    printf("  -present-mailbox        run with present mode mailbox\n");
    printf("  -present-immediate      run with present mode immediate\n");
+   printf("  -shader-object          run with shader objects\n");
    printf("  -fullscreen             run in fullscreen mode\n");
    printf("  -info                   display Vulkan device info\n");
    printf("  -size WxH               window size\n");
