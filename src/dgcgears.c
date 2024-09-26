@@ -1761,6 +1761,25 @@ check_sample_count_support(VkSampleCountFlagBits sample_count)
       (sample_count & properties.limits.framebufferDepthSampleCounts);
 }
 
+static bool
+check_indirect_commands_graphics_support()
+{
+   VkPhysicalDeviceDeviceGeneratedCommandsPropertiesEXT dgcproperties = {
+      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_PROPERTIES_EXT,
+   };
+   VkPhysicalDeviceProperties2 properties = {
+      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
+      .pNext = &dgcproperties,
+   };
+   vkGetPhysicalDeviceProperties2(physical_device, &properties);
+
+   const VkShaderStageFlags flags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+   if (use_shader_object)
+      return (dgcproperties.supportedIndirectCommandsShaderStagesShaderBinding & flags) == flags;
+   else
+      return (dgcproperties.supportedIndirectCommandsShaderStagesPipelineBinding & flags) == flags;
+}
+
 static void
 wsi_resize(int p_new_width, int p_new_height)
 {
@@ -1897,6 +1916,9 @@ main(int argc, char *argv[])
 
    if (!check_sample_count_support(sample_count))
       error("Sample count not supported");
+
+   if (!check_indirect_commands_graphics_support())
+      error("Indirect execution does not support graphics %s switching", use_shader_object ? "shader" : "pipeline");
 
    if (printInfo)
       print_info();
