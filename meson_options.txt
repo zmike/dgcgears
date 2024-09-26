@@ -1,0 +1,3 @@
+option('libdrm',                 type : 'feature')
+option('x11',                    type : 'feature')
+option('wayland',                type : 'feature')
